@@ -32,6 +32,8 @@ function runSDAC() {
 
 function showSDAC(res) {
 
+    window.lastSDAC = res;
+
     if (!(res['status'] === 'ok')) {
         var tab_name = 'Error (' + (Object.keys(window.plans).length + 1) + ')';
 
@@ -57,15 +59,17 @@ function showSDAC(res) {
         var e2fname = "SDAC-problem-"+(window.max_editor_num+1)+".pddl";
 
         createEditor();
-
         $('#tab-' + window.current_editor).text(e1fname);
         var editor = window.ace.edit(window.current_editor);
-        editor.getSession().setValue(res.result.domain_out);
+        editor.getSession().setValue(res.result['domain-out']);
 
-        createEditor()
-        $('#tab-' + window.current_editor).text(e2fname);
-        editor = window.ace.edit(window.current_editor);
-        editor.getSession().setValue(res.result.problem_out);
+        // Mandatory pause...
+        setTimeout(function() {
+            createEditor()
+            $('#tab-' + window.current_editor).text(e2fname);
+            editor = window.ace.edit(window.current_editor);
+            editor.getSession().setValue(res.result['problem-out']);
+        }, 500);
     }
 
 }
